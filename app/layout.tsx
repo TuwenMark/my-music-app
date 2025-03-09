@@ -1,7 +1,11 @@
 import type { Metadata } from 'next'
 import { Figtree } from 'next/font/google'
+import { Toaster } from 'react-hot-toast'
+
 import './globals.css'
 import Sidebar from '@/components/Sidebar'
+import SupabaseProvider from '@/providers/SupabaseProvider'
+import UserProvider from '@/providers/UserProvider'
 
 const font = Figtree({
   subsets: ['latin'],
@@ -20,7 +24,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={font.className}>
-        <Sidebar>{children}</Sidebar>
+        <SupabaseProvider>
+          <UserProvider>
+            <Sidebar>{children}</Sidebar>
+          </UserProvider>
+        </SupabaseProvider>
+        <Toaster position="top-center" />
       </body>
     </html>
   )
