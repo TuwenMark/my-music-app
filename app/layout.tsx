@@ -1,11 +1,13 @@
 import type { Metadata } from 'next'
 import { Figtree } from 'next/font/google'
-import { Toaster } from 'react-hot-toast'
 
-import './globals.css'
 import Sidebar from '@/components/Sidebar'
+import ModalProvider from '@/providers/ModalProvider'
 import SupabaseProvider from '@/providers/SupabaseProvider'
+import ToasterProvider from '@/providers/ToasterProvider'
 import UserProvider from '@/providers/UserProvider'
+import './globals.css'
+import { getSongsByUserId } from '@/lib/songActions'
 
 const font = Figtree({
   subsets: ['latin'],
@@ -16,20 +18,25 @@ export const metadata: Metadata = {
   description: 'Listen to music!',
 }
 
-export default function RootLayout({
+export const revalidate = 0
+
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const songs = await getSongsByUserId()
+
   return (
     <html lang="en">
       <body className={font.className}>
+        <ToasterProvider />
         <SupabaseProvider>
           <UserProvider>
-            <Sidebar>{children}</Sidebar>
+            <ModalProvider />
+            <Sidebar songs={songs}>{children}</Sidebar>
           </UserProvider>
         </SupabaseProvider>
-        <Toaster position="top-center" />
       </body>
     </html>
   )

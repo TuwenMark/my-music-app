@@ -1,4 +1,13 @@
-import {Stripe} from 'stripe'
+import { Stripe } from 'stripe'
+
+export interface Song {
+  id: string
+  user_id: string
+  title: string
+  author: string
+  song_path: string
+  image_path: string
+}
 
 export interface UserDetails {
   id: string
@@ -19,7 +28,7 @@ export interface Product {
   metadata?: Stripe.Metadata
 }
 
-export interface Price{
+export interface Price {
   id: string
   product_id?: string
   active?: boolean
@@ -31,7 +40,7 @@ export interface Price{
   interval_count?: number
   trial_period_days?: number | null
   metadata?: Stripe.Metadata
-  products?: Product[]
+  products?: Product
 }
 
 export interface Subscription {
@@ -40,7 +49,7 @@ export interface Subscription {
   status?: Stripe.Subscription.Status
   metadata?: Stripe.Metadata
   price_id?: string
-  quantity?: string
+  quantity?: number
   cancel_at_period_end?: boolean
   created: string
   current_period_start: string
@@ -50,5 +59,5 @@ export interface Subscription {
   canceled_at?: string
   trial_start?: string
   trial_end?: string
-  prices?: Price[]
+  prices?: Price
 }
