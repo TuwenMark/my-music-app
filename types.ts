@@ -61,3 +61,9 @@ export interface Subscription {
   trial_end?: string
   prices?: Price
 }
+
+export interface ReturnType<T = any> {
+  success: boolean
+  data?: T
+  error?: string
+}

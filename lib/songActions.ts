@@ -23,6 +23,7 @@ export const getSongsByUserId = async (): Promise<Song[]> => {
   const { data: sessionData, error: sessionError } =
     await supabase.auth.getSession()
 
+  // TODO: feedback with error message if user is not logged in
   if (sessionError) {
     console.log(sessionError.message)
     return []
@@ -48,6 +49,12 @@ export const getSongsByTitle = async (title: string): Promise<Song[]> => {
 
   if (!title) {
     return await getSongs()
+  }
+
+  // TODO: feedback with error message if user is not logged in
+  if (sessionError) {
+    console.log(sessionError.message)
+    return []
   }
 
   const { data, error } = await supabase
