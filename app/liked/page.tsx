@@ -1,16 +1,28 @@
+'use client'
+
 import Header from '@/components/Header'
-import { getLikedSongs } from '@/lib/likedSongsActions'
-import toast from 'react-hot-toast'
-import Image from 'next/image'
 import LikedContent from '@/components/LikedContent'
+import { getLikedSongs } from '@/lib/likedSongsActions'
+import { Song } from '@/types'
+import Image from 'next/image'
+import { useEffect, useState } from 'react'
+import toast from 'react-hot-toast'
 
-export const revalidate = 0
+const Liked = () => {
+  const [songs, setSongs] = useState<Song[]>([])
 
-const Liked = async () => {
-  const { success, data: songs, error } = await getLikedSongs()
-  if (!success && error) {
-    return toast.error(error)
-  }
+  useEffect(() => {
+    const fetchData = async () => {
+      const { success, data, error } = await getLikedSongs()
+      if (!success) {
+        toast.error(error ?? 'Something went wrong')
+      } else {
+        setSongs(data ?? [])
+      }
+    }
+
+    fetchData()
+  }, [])
 
   return (
     <div className="bg-neutral-900 rounded-lg h-full w-full overflow-hidden overflow-y-auto">

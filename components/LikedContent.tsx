@@ -12,16 +12,6 @@ interface LikedContentProps {
 }
 
 const LikedContent = ({ songs }: LikedContentProps) => {
-  const router = useRouter()
-  const { isLoading, user } = useUser()
-
-  useEffect(() => {
-    if (!isLoading && !user) {
-      router.push('/login')
-      return
-    }
-  }, [isLoading, user, router])
-
   if (songs.length === 0) {
     return <div className="w-full px-6 text-neutral-400">No liked songs.</div>
   }

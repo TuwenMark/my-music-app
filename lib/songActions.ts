@@ -1,6 +1,6 @@
 'use server'
 
-import { Song } from '@/types'
+import { Song, ReturnType } from '@/types'
 import { createServerComponentClient } from '@supabase/auth-helpers-nextjs'
 import { cookies } from 'next/headers'
 
@@ -15,7 +15,7 @@ export const getSongs = async (): Promise<Song[]> => {
     console.log(error.message)
   }
 
-  return (data as any) || []
+  return data || []
 }
 
 export const getSongsByUserId = async (): Promise<Song[]> => {
@@ -39,7 +39,7 @@ export const getSongsByUserId = async (): Promise<Song[]> => {
     console.log(error.message)
   }
 
-  return (data as any) || []
+  return data || []
 }
 
 export const getSongsByTitle = async (title: string): Promise<Song[]> => {
@@ -68,5 +68,25 @@ export const getSongsByTitle = async (title: string): Promise<Song[]> => {
     console.log(error.message)
   }
 
-  return (data as any) || []
+  return data || []
+}
+
+export const getSongById = async (id: string): Promise<ReturnType<Song>> => {
+  if (!id) {
+    return { success: false, error: 'Params error' }
+  }
+  const supabaseClient = createServerComponentClient({ cookies })
+  const { data, error } = await supabaseClient
+    .from('songs')
+    .select('*')
+    .eq('id', id)
+    .single()
+  if (error) {
+    console.log(error.message)
+    return { success: false, error: 'Internal error' }
+  }
+  if (!data) {
+    return { success: false, error: 'Song not found' }
+  }
+  return { success: true, data: data }
 }

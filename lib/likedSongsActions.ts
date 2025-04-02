@@ -48,6 +48,7 @@ export const removeLikedSong = async (
     .delete()
     .eq('song_id', songId)
     .eq('user_id', sessionData.session?.user.id)
+    .single()
 
   if (error) {
     console.log(error.message)
