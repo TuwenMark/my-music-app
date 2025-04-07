@@ -1,3 +1,5 @@
+'use client'
+
 import { getSongById } from '@/lib/songActions'
 import { Song } from '@/types'
 import { useEffect, useMemo, useState } from 'react'
@@ -21,7 +23,7 @@ const useGetSongById = (id: string) => {
     }
 
     fetchData()
-  }, [isLoading, song])
+  }, [id])
 
   return useMemo(
     () => ({

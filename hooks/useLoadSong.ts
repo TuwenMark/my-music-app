@@ -1,3 +1,5 @@
+'use client'
+
 import { Song } from '@/types'
 import { useSupabaseClient } from '@supabase/auth-helpers-react'
 
