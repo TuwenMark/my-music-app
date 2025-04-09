@@ -59,10 +59,18 @@ const Header = ({ children, className }: HeaderProps) => {
         </div>
         <div className="flex md:hidden items-center gap-x-2">
           <button className="rounded-full p-2 bg-white flex justify-center items-center hover:opacity-75 transition">
-            <HiHome className="text-black" size={20} />
+            <HiHome
+              onClick={() => router.push('/')}
+              className="text-black"
+              size={20}
+            />
           </button>
           <button className="rounded-full p-2 bg-white flex justify-center items-center hover:opacity-75 transition">
-            <BiSearch className="text-black" size={20} />
+            <BiSearch
+              onClick={() => router.push('/search')}
+              className="text-black"
+              size={20}
+            />
           </button>
         </div>
         <div className="flex justify-between items-center gap-x-4">

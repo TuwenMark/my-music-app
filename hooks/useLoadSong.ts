@@ -4,9 +4,11 @@ import { Song } from '@/types'
 import { useSupabaseClient } from '@supabase/auth-helpers-react'
 
 const useLoadSong = (song: Song) => {
-  if (!song) return
-
   const supabaseClient = useSupabaseClient()
+
+  if (!song) {
+    return
+  }
 
   const { data } = supabaseClient.storage
     .from('songs')

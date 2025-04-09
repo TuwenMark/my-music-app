@@ -13,6 +13,10 @@ const useGetSongById = (id: string) => {
     const fetchData = async () => {
       setIsLoading(true)
 
+      if (!id) {
+        return setIsLoading(false)
+      }
+
       const { success, data, error } = await getSongById(id)
       if (!success) {
         return toast.error(error ?? 'Something went wrong')
