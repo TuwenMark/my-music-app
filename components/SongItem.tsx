@@ -11,8 +11,8 @@ interface SongItemProps {
 }
 
 const SongItem = ({ data, onClick }: SongItemProps) => {
-  if (!data) return null
   const imageUrl = useLoadImage(data.image_path)
+  if (!data || !imageUrl) return null
   return (
     <div
       onClick={() => onClick(data.id)}

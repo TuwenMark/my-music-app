@@ -47,8 +47,7 @@ const LikeButton = ({ songId }: LikeButtonProps) => {
 
   const handleLike = async () => {
     if (!user?.id) {
-      const authModal = useAuthModal()
-      authModal.onOpen()
+      toast.error('Please login first!')
       return
     }
 

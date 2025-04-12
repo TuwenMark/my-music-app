@@ -1,3 +1,5 @@
+'use client'
+
 import useUploadModal from '@/hooks/useUploadModel'
 import { useUser } from '@/hooks/useUser'
 import { useSupabaseClient } from '@supabase/auth-helpers-react'
