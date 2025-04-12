@@ -19,13 +19,12 @@ const AuthModal = () => {
   useEffect(() => {
     const login = async () => {
       const result = await loginNetease();
-      return result;
+      alert(result);
     };
 
     if (session) {
       // login Netease cloud music
-      const result = login();
-      alert(result);
+      login();
       router.refresh();
       onClose();
     }
