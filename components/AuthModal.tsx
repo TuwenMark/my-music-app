@@ -1,32 +1,41 @@
-'use client'
+'use client';
 
-import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react'
-import { useRouter } from 'next/navigation'
-import { Auth } from '@supabase/auth-ui-react'
-import { ThemeSupa } from '@supabase/auth-ui-shared'
-import { useEffect } from 'react'
+import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
+import { Auth } from '@supabase/auth-ui-react';
+import { ThemeSupa } from '@supabase/auth-ui-shared';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 
-import Modal from './Modal'
-import useAuthModal from '@/hooks/useAuthModel'
+import useAuthModal from '@/hooks/useAuthModel';
+import { loginNetease } from '@/lib/neteasecloud/loginActions';
+import Modal from './Modal';
 
 const AuthModal = () => {
-  const supabaseClient = useSupabaseClient()
-  const session = useSession()
-  const router = useRouter()
-  const { onClose, isOpen } = useAuthModal()
+  const supabaseClient = useSupabaseClient();
+  const session = useSession();
+  const router = useRouter();
+  const { onClose, isOpen } = useAuthModal();
 
   useEffect(() => {
+    const login = async () => {
+      const result = await loginNetease();
+      return result;
+    };
+
     if (session) {
-      router.refresh()
-      onClose()
+      // login Netease cloud music
+      const result = login();
+      alert(result);
+      router.refresh();
+      onClose();
     }
-  }, [session, router, onClose])
+  }, [session, router, onClose]);
   // open: the status to be switched to
   const onChange = (open: boolean) => {
     if (!open) {
-      onClose()
+      onClose();
     }
-  }
+  };
 
   return (
     <Modal
@@ -53,7 +62,7 @@ const AuthModal = () => {
         }}
       />
     </Modal>
-  )
-}
+  );
+};
 
-export default AuthModal
+export default AuthModal;
