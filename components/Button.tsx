@@ -1,8 +1,6 @@
 import { forwardRef } from 'react'
 import { twMerge } from 'tailwind-merge'
 
-interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {}
-
 // forwardRef期望有两个泛型<ref 指向的类型,组件接收的 props 类型>
 const Button = forwardRef<
   HTMLButtonElement,

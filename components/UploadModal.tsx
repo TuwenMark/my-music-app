@@ -3,6 +3,7 @@
 import useUploadModal from '@/hooks/useUploadModel'
 import { useUser } from '@/hooks/useUser'
 import { useSupabaseClient } from '@supabase/auth-helpers-react'
+import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
@@ -10,9 +11,8 @@ import uniqid from 'uniqid'
 import Button from './Button'
 import Input from './Input'
 import Modal from './Modal'
-import { useRouter } from 'next/navigation'
 
-const uploadModal = () => {
+const UploadModal = () => {
   const [isLoading, setIsLoading] = useState(false)
   const { isOpen, onClose } = useUploadModal()
   const { user } = useUser()
@@ -145,4 +145,4 @@ const uploadModal = () => {
   )
 }
 
-export default uploadModal
+export default UploadModal

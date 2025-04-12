@@ -1,6 +1,5 @@
 'use client'
 
-import useAuthModal from '@/hooks/useAuthModel'
 import { useUser } from '@/hooks/useUser'
 import {
   addLikedSong,
