@@ -3,7 +3,7 @@
 import Header from '@/components/Header';
 import LikedContent from '@/components/LikedContent';
 import { getLikedSongs } from '@/lib/likedSongsActions';
-import { Song } from '@/types/types';
+import { Song } from '@/types/types_song';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';

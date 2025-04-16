@@ -1,7 +1,7 @@
 'use client';
 
 import useOnPlay from '@/hooks/useOnPlay';
-import { Song } from '@/types/types';
+import { Song } from '@/types/types_song';
 import LikeButton from './LikeButton';
 import MediaItem from './MediaItem';
 

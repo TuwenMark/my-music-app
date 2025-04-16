@@ -1,6 +1,7 @@
 'use server';
 
-import { ReturnType, Song } from '@/types/types';
+import { ReturnType } from '@/types/types';
+import { Song } from '@/types/types_song';
 import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
 import { cookies } from 'next/headers';
 

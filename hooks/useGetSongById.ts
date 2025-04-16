@@ -1,7 +1,7 @@
 'use client';
 
 import { getSongById } from '@/lib/songActions';
-import { Song } from '@/types/types';
+import { Song } from '@/types/types_song';
 import { useEffect, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
 
