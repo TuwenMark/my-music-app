@@ -1,19 +1,19 @@
-'use client'
+'use client';
 
-import useOnPlay from '@/hooks/useOnPlay'
-import { Song } from '@/types'
-import LikeButton from './LikeButton'
-import MediaItem from './MediaItem'
+import useOnPlay from '@/hooks/useOnPlay';
+import { Song } from '@/types/types';
+import LikeButton from './LikeButton';
+import MediaItem from './MediaItem';
 
 interface LikedContentProps {
-  songs: Song[]
+  songs: Song[];
 }
 
 const LikedContent = ({ songs }: LikedContentProps) => {
-  const onPlay = useOnPlay(songs)
+  const onPlay = useOnPlay(songs);
 
   if (songs.length === 0) {
-    return <div className="w-full px-6 text-neutral-400">No liked songs.</div>
+    return <div className="w-full px-6 text-neutral-400">No liked songs.</div>;
   }
   return (
     <div className="flex flex-col gap-y-2 w-full p-6">
@@ -26,7 +26,7 @@ const LikedContent = ({ songs }: LikedContentProps) => {
         </div>
       ))}
     </div>
-  )
-}
+  );
+};
 
-export default LikedContent
+export default LikedContent;

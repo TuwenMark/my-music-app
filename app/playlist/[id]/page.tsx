@@ -1,28 +1,18 @@
-'use client';
-
 import Header from '@/components/Header';
-import LikedContent from '@/components/LikedContent';
-import { getLikedSongs } from '@/lib/likedSongsActions';
-import { Song } from '@/types/types';
+import SongList from '@/components/SongList';
+import { getPlaylistDetail } from '@/lib/neteasecloud/songActions';
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 
-const Liked = () => {
-  const [songs, setSongs] = useState<Song[]>([]);
+export default async function Playlist({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
+  const playlist = await getPlaylistDetail(id);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const { success, data, error } = await getLikedSongs();
-      if (!success) {
-        toast.error(error ?? 'Something went wrong');
-      } else {
-        setSongs(data ?? []);
-      }
-    };
-
-    fetchData();
-  }, []);
+  if (!playlist) return toast.error('Playlist not found!');
 
   return (
     <div className="bg-neutral-900 rounded-lg h-full w-full overflow-hidden overflow-y-auto">
@@ -33,22 +23,20 @@ const Liked = () => {
               <Image
                 className="object-cover"
                 alt="Playlist"
-                src="/images/liked.png"
+                src={playlist.image_url}
                 fill
               />
             </div>
             <div className="flex flex-col gap-y-2 mt-4 md:mt-0">
               <p className="hidden md:block font-semibold text-sm">Playlist</p>
               <h1 className="text-white text-4xl sm:text-5xl lg:text-7xl font-bold">
-                Liked Songs
+                {playlist.name}
               </h1>
             </div>
           </div>
         </div>
       </Header>
-      <LikedContent songs={songs ?? []} />
+      <SongList songs={playlist.songs ?? []} />
     </div>
   );
-};
-
-export default Liked;
+}

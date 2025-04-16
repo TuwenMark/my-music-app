@@ -67,3 +67,15 @@ export interface ReturnType<T = any> {
   data?: T;
   error?: string;
 }
+
+export interface LoginResponse {
+  code: number;
+  createTime: number;
+  userId: string;
+  cookie: string;
+}
+
+export interface LoginData {
+  userId: string;
+  cookie: string;
+}

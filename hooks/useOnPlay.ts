@@ -1,25 +1,17 @@
-'use client'
+'use client';
 
-import { Song } from '@/types'
-import usePlayer from './usePlayer'
-import useAuthModel from './useAuthModel'
-import { useUser } from './useUser'
+import { Song } from '@/types/types_song';
+import usePlayer from './usePlayer';
 
 const useOnPlay = (songs: Song[]) => {
-  const player = usePlayer()
-  const authModel = useAuthModel()
-  const { user } = useUser()
+  const player = usePlayer();
 
   const onPlay = (id: string) => {
-    if (!user) {
-      return authModel.onOpen()
-    }
+    player.setId(id);
+    player.setIds(songs.map((song) => song.id));
+  };
 
-    player.setId(id)
-    player.setIds(songs.map((song) => song.id))
-  }
+  return onPlay;
+};
 
-  return onPlay
-}
-
-export default useOnPlay
+export default useOnPlay;

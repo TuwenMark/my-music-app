@@ -1,15 +1,11 @@
 'use client';
 
 import useOnPlay from '@/hooks/useOnPlay';
-import { Song } from '@/types/types';
+import { Song } from '@/types/types_song';
 import LikeButton from './LikeButton';
 import MediaItem from './MediaItem';
 
-interface SearchContentProps {
-  songs: Song[];
-}
-
-const SearchContent = ({ songs }: SearchContentProps) => {
+const SongList = ({ songs }: { songs: Song[] }) => {
   const onPlay = useOnPlay(songs);
 
   if (!songs || songs.length === 0) {
@@ -32,4 +28,4 @@ const SearchContent = ({ songs }: SearchContentProps) => {
   );
 };
 
-export default SearchContent;
+export default SongList;

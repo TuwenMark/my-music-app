@@ -1,31 +1,29 @@
-'use client'
+'use client';
 
-import useAuthModal from '@/hooks/useAuthModel'
-import useUploadModal from '@/hooks/useUploadModel'
-import { useUser } from '@/hooks/useUser'
-import { Song } from '@/types'
-import { AiOutlinePlus } from 'react-icons/ai'
-import { TbPlaylist } from 'react-icons/tb'
-import MediaItem from './MediaItem'
-import useOnPlay from '@/hooks/useOnPlay'
+import useAuthModal from '@/hooks/useAuthModel';
+import useUploadModal from '@/hooks/useUploadModel';
+import { useUser } from '@/hooks/useUser';
+import { Song } from '@/types/types';
+import { AiOutlinePlus } from 'react-icons/ai';
+import { TbPlaylist } from 'react-icons/tb';
 
 interface LibraryProps {
-  songs: Song[]
+  songs: Song[];
 }
 
 const Library = ({ songs }: LibraryProps) => {
-  const authModal = useAuthModal()
-  const { user } = useUser()
-  const uploadModal = useUploadModal()
-  const onPlay = useOnPlay(songs)
+  const authModal = useAuthModal();
+  const { user } = useUser();
+  const uploadModal = useUploadModal();
+  // const onPlay = useOnPlay(songs);
 
   const onClick = () => {
     if (!user) {
-      return authModal.onOpen()
+      return authModal.onOpen();
     }
     // TODO: Check for subscription
-    return uploadModal.onOpen()
-  }
+    return uploadModal.onOpen();
+  };
   return (
     <div className="flex flex-col">
       <div className="flex items-center justify-between px-5 pt-4">
@@ -40,16 +38,16 @@ const Library = ({ songs }: LibraryProps) => {
         />
       </div>
       <div className="flex flex-col mt-4 px-3 gap-y-2">
-        {songs.map((song) => (
+        {/* {songs.map((song) => (
           <MediaItem
             key={song.id}
             onClick={(id: string) => onPlay(id)}
             data={song}
           />
-        ))}
+        ))} */}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Library
+export default Library;

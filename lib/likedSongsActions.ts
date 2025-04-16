@@ -1,8 +1,8 @@
 'use server';
 
+import { ReturnType, Song } from '@/types/types';
 import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
 import { cookies } from 'next/headers';
-import { ReturnType, Song } from '@/types';
 
 export const getLikedSong = async (
   songId: string,

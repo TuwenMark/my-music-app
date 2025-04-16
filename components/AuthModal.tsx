@@ -17,14 +17,10 @@ const AuthModal = () => {
   const { onClose, isOpen } = useAuthModal();
 
   useEffect(() => {
-    const login = async () => {
-      const result = await loginNetease();
-      alert(result);
-    };
+    // login netease cloud music
+    loginNetease();
 
     if (session) {
-      // login Netease cloud music
-      login();
       router.refresh();
       onClose();
     }
