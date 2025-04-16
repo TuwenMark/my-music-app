@@ -1,14 +1,13 @@
 import { createMiddlewareClient } from '@supabase/auth-helpers-nextjs';
 import { NextRequest, NextResponse } from 'next/server';
 import toast from 'react-hot-toast';
-import { refreshCookie } from './lib/neteasecloud/loginActions';
 
 export async function middleware(req: NextRequest) {
   // 1. Intercept requests and refresh netease cloud music cookie
-  const { success, error } = await refreshCookie();
-  if (!success) {
-    console.log(error);
-    return toast.error('Login netease cloud music failed!');
+  const result = await fetch(`${req.nextUrl.origin}/api/refresh`);
+  if (!result.ok) {
+    const data = await result.json();
+    toast.error(data.error || 'Refresh cookie failed!');
   }
   // 2. Response
   const res = NextResponse.next();
