@@ -3,7 +3,6 @@ import { Figtree } from 'next/font/google';
 
 import Player from '@/components/Player';
 import Sidebar from '@/components/Sidebar';
-import { getSongsByUserId } from '@/lib/songActions';
 import ModalProvider from '@/providers/ModalProvider';
 import SupabaseProvider from '@/providers/SupabaseProvider';
 import ToasterProvider from '@/providers/ToasterProvider';
@@ -26,8 +25,6 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const songs = await getSongsByUserId();
-
   return (
     <html lang="en">
       <body className={font.className}>
@@ -35,7 +32,7 @@ export default async function RootLayout({
         <SupabaseProvider>
           <UserProvider>
             <ModalProvider />
-            <Sidebar songs={songs}>{children}</Sidebar>
+            <Sidebar>{children}</Sidebar>
             <Player />
           </UserProvider>
         </SupabaseProvider>

@@ -4,6 +4,7 @@ import {
   NeteasePlaylistDetail,
   NeteaseResponse,
   NeteaseSongDetail,
+  NeteaseSongUrlData,
 } from '@/types/types_netease';
 import { Playlist, Song } from '@/types/types_song';
 import fetch from 'node-fetch';
@@ -91,7 +92,7 @@ export const getSongUrlById = async (id: string): Promise<string> => {
   })
     .then((response) => response.json())
     .then((data) => {
-      return (data as any).data[0].url;
+      return (data as NeteaseSongUrlData).data[0].url;
     })
     .catch((error) => {
       console.log(error);

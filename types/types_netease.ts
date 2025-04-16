@@ -41,3 +41,9 @@ export interface NeteasePlaylistDetail {
 export interface NeteaseSongDetail {
   songs: Track[];
 }
+
+export interface NeteaseSongUrlData {
+  data: {
+    url: string;
+  }[];
+}

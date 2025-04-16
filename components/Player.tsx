@@ -14,7 +14,6 @@ const Player = () => {
   const [songUrl, setSongUrl] = useState('');
   const [song, setSong] = useState<Song | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
-  // const { song } = useGetSongById(activeId || '')
 
   // TODO: Optimize this param
   // const songUrl = useLoadSong(song!)
