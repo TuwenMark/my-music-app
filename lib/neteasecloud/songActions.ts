@@ -1,5 +1,6 @@
 'use server';
 
+import { ReturnType } from '@/types/types';
 import {
   NeteasePlaylistDetail,
   NeteaseResponse,
@@ -13,14 +14,16 @@ import { loginNetease } from './loginActions';
 // Netease cloud music API base URL
 const baseUrl = process.env.NETEASE_CLOUD_MUSIC_API_HOST ?? '';
 
-export const getDailyRecommendPlaylist = async (): Promise<Playlist[]> => {
+export const getDailyRecommendPlaylist = async (): Promise<
+  ReturnType<Playlist[]>
+> => {
   const url = `${baseUrl}/recommend/resource`;
 
   // Get netease cookie from database
   const response = await loginNetease();
   if (!response.success || !response.data) {
     console.log('Get cookie error!');
-    return [];
+    return { success: false, error: 'Login Netease Cloud failed' };
   }
 
   const neteaseResponse = (await fetch(url, {
@@ -39,14 +42,15 @@ export const getDailyRecommendPlaylist = async (): Promise<Playlist[]> => {
       creator: data.creator.nickname,
     } as Playlist;
   });
-  return playlists;
+  return { success: true, data: playlists };
 };
 
 export const getPlaylistDetail = async (
   id: string,
-): Promise<Playlist | null> => {
+): Promise<ReturnType<Playlist>> => {
   if (!id) {
-    return null;
+    console.log('There is no playlist id.');
+    return { success: false, error: 'Please select a playlist!' };
   }
 
   const url = new URL(`${baseUrl}/playlist/detail`);
@@ -63,27 +67,30 @@ export const getPlaylistDetail = async (
           author: track.ar.map((artist) => artist.name).join(' & '),
         };
       });
-      return {
+      const playlist = {
         id: neteasePlaylist.id,
         name: neteasePlaylist.name,
         image_url: neteasePlaylist.coverImgUrl,
         creator: neteasePlaylist.creator.nickname,
         songs,
       } as Playlist;
+      return { success: true, data: playlist };
     })
     .catch((error) => {
       console.log(error);
-      return null;
+      return { success: false, error: 'Get playlist detail failed!' };
     });
 };
 
-export const getSongUrlById = async (id: string): Promise<string> => {
+export const getSongUrlById = async (
+  id: string,
+): Promise<ReturnType<string>> => {
   const url = new URL(`${baseUrl}/song/url`);
   url.searchParams.append('id', encodeURIComponent(id));
   const response = await loginNetease();
   if (!response.success || !response.data) {
     console.log('Get cookie error!');
-    return '';
+    return { success: false, error: 'Login netease cloud failed!' };
   }
   return fetch(url, {
     headers: {
@@ -92,30 +99,31 @@ export const getSongUrlById = async (id: string): Promise<string> => {
   })
     .then((response) => response.json())
     .then((data) => {
-      return (data as NeteaseSongUrlData).data[0].url;
+      return { success: true, data: (data as NeteaseSongUrlData).data[0].url };
     })
     .catch((error) => {
       console.log(error);
-      return '';
+      return { success: false, error: 'Get song failed!' };
     });
 };
 
-export const getSongById = async (id: string): Promise<Song | null> => {
+export const getSongById = async (id: string): Promise<ReturnType<Song>> => {
   const url = new URL(`${baseUrl}/song/detail`);
   url.searchParams.append('ids', id);
   return fetch(url)
     .then((response) => response.json())
     .then((data) => {
       const track = (data as NeteaseSongDetail).songs[0];
-      return {
+      const song = {
         id: track.id,
         name: track.name,
         image_url: track.al.picUrl,
         author: track.ar.map((artist) => artist.name).join(' & '),
       } as Song;
+      return { success: true, data: song };
     })
     .catch((error) => {
       console.log(error);
-      return null;
+      return { success: false, error: 'Get song failed!' };
     });
 };

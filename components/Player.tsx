@@ -1,7 +1,6 @@
 'use client';
 
 import usePlayer from '@/hooks/usePlayer';
-import { refreshCookie } from '@/lib/neteasecloud/loginActions';
 import { getSongById, getSongUrlById } from '@/lib/neteasecloud/songActions';
 import { Song } from '@/types/types_song';
 import { useEffect, useState } from 'react';
@@ -21,20 +20,23 @@ const Player = () => {
       if (!activeId) return null;
       setLoading(true);
       try {
-        let urlData = await getSongUrlById(activeId);
-        let songData = await getSongById(activeId);
-        if (!urlData || !songData) {
-          // refresh cookie and retry
-          refreshCookie();
-          urlData = await getSongUrlById(activeId);
-          songData = await getSongById(activeId);
+        const {
+          success: urlSuccess,
+          data: urlData,
+          error: urlError,
+        } = await getSongUrlById(activeId);
+        const {
+          success: songSuccess,
+          data: songData,
+          error: songError,
+        } = await getSongById(activeId);
+        if (!urlSuccess || !songSuccess) {
+          return toast.error(urlError ?? songError ?? 'Get song failed!');
         }
         if (urlData && songData) {
           setSongUrl(urlData);
           setSong(songData);
         }
-      } catch (error) {
-        toast.error('Song not found!');
       } finally {
         setLoading(false);
       }
@@ -43,7 +45,7 @@ const Player = () => {
     fetchData();
   }, [activeId]);
 
-  // If data unloaded，return null
+  // If data unloaded， null
   if (loading || !song || !songUrl) return null;
 
   return (

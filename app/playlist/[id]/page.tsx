@@ -10,9 +10,11 @@ export default async function Playlist({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const playlist = await getPlaylistDetail(id);
+  const { success, data: playlist, error } = await getPlaylistDetail(id);
 
-  if (!playlist) return toast.error('Playlist not found!');
+  if (!success) {
+    toast.error(error ?? 'Something went wrong!');
+  }
 
   return (
     <div className="bg-neutral-900 rounded-lg h-full w-full overflow-hidden overflow-y-auto">
@@ -23,20 +25,20 @@ export default async function Playlist({
               <Image
                 className="object-cover"
                 alt="Playlist"
-                src={playlist.image_url}
+                src={playlist?.image_url ?? '/images/kenan.jpg'}
                 fill
               />
             </div>
             <div className="flex flex-col gap-y-2 mt-4 md:mt-0">
               <p className="hidden md:block font-semibold text-sm">Playlist</p>
               <h1 className="text-white text-4xl sm:text-5xl lg:text-7xl font-bold">
-                {playlist.name}
+                {playlist?.name ?? ''}
               </h1>
             </div>
           </div>
         </div>
       </Header>
-      <SongList songs={playlist.songs ?? []} />
+      <SongList songs={playlist?.songs ?? []} />
     </div>
   );
 }

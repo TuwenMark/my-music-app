@@ -2,11 +2,16 @@ import Header from '@/components/Header';
 import ListItem from '@/components/ListItem';
 import PageContent from '@/components/PageContent';
 import { getDailyRecommendPlaylist } from '@/lib/neteasecloud/songActions';
+import toast from 'react-hot-toast';
 
 export const revalidate = 0;
 
 export default async function Home() {
-  const playlists = await getDailyRecommendPlaylist();
+  const { success, data, error } = await getDailyRecommendPlaylist();
+
+  if (!success) {
+    toast.error(error ?? 'Get daily recommend playlist failed!');
+  }
 
   return (
     <div className="bg-neutral-900 rounded-lg h-full w-full overflow-hidden overflow-y-auto">
@@ -28,7 +33,7 @@ export default async function Home() {
             </h1>
           </div>
           <div>
-            <PageContent playlists={playlists} />
+            <PageContent playlists={data ?? []} />
           </div>
         </div>
       </Header>
