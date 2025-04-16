@@ -16,7 +16,6 @@ const Player = () => {
   const [loading, setLoading] = useState<boolean>(false);
 
   // TODO: Optimize this param
-  // const songUrl = useLoadSong(song!)
   useEffect(() => {
     const fetchData = async () => {
       if (!activeId) return null;
@@ -44,7 +43,7 @@ const Player = () => {
     fetchData();
   }, [activeId]);
 
-  // 如果数据未加载完成，返回 null
+  // If data unloaded，return null
   if (loading || !song || !songUrl) return null;
 
   return (
