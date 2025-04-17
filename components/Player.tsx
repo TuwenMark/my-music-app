@@ -1,8 +1,8 @@
 'use client';
 
 import usePlayer from '@/hooks/usePlayer';
+import { refreshAndExecute } from '@/lib/actions';
 import { getSongById, getSongUrlById } from '@/lib/neteasecloud/songActions';
-import { ReturnType } from '@/types/types';
 import { Song } from '@/types/types_song';
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
@@ -25,7 +25,7 @@ const Player = () => {
           success: urlSuccess,
           data: urlData,
           error: urlError,
-        } = await refreshAndExecute(getSongUrlById(activeId));
+        } = await refreshAndExecute(() => getSongUrlById(activeId));
         const {
           success: songSuccess,
           data: songData,
@@ -57,10 +57,3 @@ const Player = () => {
 };
 
 export default Player;
-function refreshAndExecute(
-  arg0: Promise<ReturnType<string>>,
-):
-  | { success: any; data: any; error: any }
-  | PromiseLike<{ success: any; data: any; error: any }> {
-  throw new Error('Function not implemented.');
-}
