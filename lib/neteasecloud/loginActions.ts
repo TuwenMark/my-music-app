@@ -2,16 +2,20 @@
 
 import { LoginResponse, ReturnType } from '@/types/types';
 import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
+import { HttpsProxyAgent } from 'https-proxy-agent';
 import { cookies } from 'next/headers';
 import fetch from 'node-fetch';
 
-// supabaseClient
-const supabaseClient = createServerComponentClient({ cookies });
 // Netease cloud music API base URL
 const baseUrl = process.env.NETEASE_CLOUD_MUSIC_API_HOST ?? '';
+// Localhost agent URL
+const proxy = process.env.LOCAL_AGENT_URL ?? '';
+const agent = new HttpsProxyAgent(proxy);
 
 // Visitor login
 export const loginNetease = async (): Promise<ReturnType<string>> => {
+  // supabaseClient
+  const supabaseClient = createServerComponentClient({ cookies });
   const url = `${baseUrl}/register/anonimous`;
 
   // Get netease cloud cookie from database
@@ -29,9 +33,18 @@ export const loginNetease = async (): Promise<ReturnType<string>> => {
   }
 
   // If not exists，login netease cloud
-  const responseData = await fetch(url, {
-    method: 'POST',
-  }).then((response) => response.json());
+  const options =
+    process.env.NODE_ENV === 'development'
+      ? {
+          method: 'POST',
+          agent: agent,
+        }
+      : {
+          method: 'POST',
+        };
+  const responseData = await fetch(url, options).then((response) =>
+    response.json(),
+  );
   const loginResponse = responseData as LoginResponse;
   const cookieArray = loginResponse.cookie.replace(/\s+/g, '').split(';');
   const index = cookieArray.findIndex((item) => item.startsWith('MUSIC_A='));
@@ -52,12 +65,23 @@ export const loginNetease = async (): Promise<ReturnType<string>> => {
 };
 
 export const refreshCookie = async (): Promise<ReturnType<string>> => {
+  // supabaseClient
+  const supabaseClient = createServerComponentClient({ cookies });
   const url = `${baseUrl}/register/anonimous`;
 
   // Login netease cloud
-  const responseData = await fetch(url, {
-    method: 'POST',
-  }).then((response) => response.json());
+  const options =
+    process.env.NODE_ENV === 'development'
+      ? {
+          method: 'POST',
+          agent: agent,
+        }
+      : {
+          method: 'POST',
+        };
+  const responseData = await fetch(url, options).then((response) =>
+    response.json(),
+  );
   const loginResponse = responseData as LoginResponse;
   const cookieArray = loginResponse.cookie.replace(/\s+/g, '').split(';');
   const index = cookieArray.findIndex((item) => item.startsWith('MUSIC_A='));

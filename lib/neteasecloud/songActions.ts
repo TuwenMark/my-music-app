@@ -7,12 +7,17 @@ import {
   NeteaseSongDetail,
   NeteaseSongUrlData,
 } from '@/types/types_netease';
+import { HttpsProxyAgent } from 'https-proxy-agent';
 import { Playlist, Song } from '@/types/types_song';
 import fetch from 'node-fetch';
 import { loginNetease } from './loginActions';
 
 // Netease cloud music API base URL
 const baseUrl = process.env.NETEASE_CLOUD_MUSIC_API_HOST ?? '';
+
+// Localhost agent URL
+const proxy = process.env.LOCAL_AGENT_URL ?? '';
+const agent = new HttpsProxyAgent(proxy);
 
 export const getDailyRecommendPlaylist = async (): Promise<
   ReturnType<Playlist[]>
@@ -26,11 +31,22 @@ export const getDailyRecommendPlaylist = async (): Promise<
     return { success: false, error: 'Login Netease Cloud failed' };
   }
 
-  const neteaseResponse = (await fetch(url, {
-    headers: {
-      Cookie: response.data,
-    },
-  })
+  const options =
+    process.env.NODE_ENV === 'development'
+      ? {
+          headers: {
+            Cookie: response.data,
+          },
+          agent: agent,
+        }
+      : {
+          headers: {
+            Cookie: response.data,
+          },
+        };
+  console.log(options); // for debuggi
+
+  const neteaseResponse = (await fetch(url, options)
     .then((response) => response.json())
     .catch((error) => console.log(error))) as NeteaseResponse;
 
@@ -55,7 +71,13 @@ export const getPlaylistDetail = async (
 
   const url = new URL(`${baseUrl}/playlist/detail`);
   url.searchParams.append('id', id);
-  return fetch(url, {})
+  const options =
+    process.env.NODE_ENV === 'development'
+      ? {
+          agent: agent,
+        }
+      : {};
+  return fetch(url, options)
     .then((response) => response.json())
     .then((data) => {
       const neteasePlaylist = (data as NeteasePlaylistDetail).playlist;
@@ -92,11 +114,20 @@ export const getSongUrlById = async (
     console.log('Get cookie error!');
     return { success: false, error: 'Login netease cloud failed!' };
   }
-  return fetch(url, {
-    headers: {
-      Cookie: response.data,
-    },
-  })
+  const options =
+    process.env.NODE_ENV === 'development'
+      ? {
+          headers: {
+            Cookie: response.data,
+          },
+          agent: agent,
+        }
+      : {
+          headers: {
+            Cookie: response.data,
+          },
+        };
+  return fetch(url, options)
     .then((response) => response.json())
     .then((data) => {
       return { success: true, data: (data as NeteaseSongUrlData).data[0].url };
@@ -110,7 +141,8 @@ export const getSongUrlById = async (
 export const getSongById = async (id: string): Promise<ReturnType<Song>> => {
   const url = new URL(`${baseUrl}/song/detail`);
   url.searchParams.append('ids', id);
-  return fetch(url)
+  const options = process.env.NODE_ENV === 'development' ? { agent } : {};
+  return fetch(url, options)
     .then((response) => response.json())
     .then((data) => {
       const track = (data as NeteaseSongDetail).songs[0];

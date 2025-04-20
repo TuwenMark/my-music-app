@@ -6,7 +6,7 @@ import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
 import { cookies } from 'next/headers';
 
 export const getSongs = async (): Promise<Song[]> => {
-  const supabase = createServerComponentClient({ cookies: cookies });
+  const supabase = createServerComponentClient({ cookies });
   const { data, error } = await supabase
     .from('songs')
     .select('*')
@@ -20,7 +20,7 @@ export const getSongs = async (): Promise<Song[]> => {
 };
 
 export const getSongsByUserId = async (): Promise<Song[]> => {
-  const supabase = createServerComponentClient({ cookies: cookies });
+  const supabase = createServerComponentClient({ cookies });
   const { data: sessionData, error: sessionError } =
     await supabase.auth.getSession();
 
@@ -44,7 +44,7 @@ export const getSongsByUserId = async (): Promise<Song[]> => {
 };
 
 export const getSongsByTitle = async (title: string): Promise<Song[]> => {
-  const supabase = createServerComponentClient({ cookies: cookies });
+  const supabase = createServerComponentClient({ cookies });
   const { data: sessionData, error: sessionError } =
     await supabase.auth.getSession();
 
